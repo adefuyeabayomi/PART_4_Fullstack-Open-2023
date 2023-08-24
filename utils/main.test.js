@@ -85,3 +85,12 @@ test('dummy returns one', () => {
       })
     })
   })
+  describe('popular author', () => {
+    test('Author with most blog likes', () => {
+      const result = listHelper.popularBloggers(blogList)
+      expect(result).toEqual({
+        author: "Edsger W. Dijkstra",
+        likes: 17
+      })
+    })
+  })
