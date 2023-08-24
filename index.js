@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const config = require("./utils/config");
-const logger = require("./utils/logger");
+const config = require("./utils/config")
+const logger = require("./utils/logger")
 const blogController = require("./controllers/blogs")
 const middleware = require("./utils/middleware")
 
