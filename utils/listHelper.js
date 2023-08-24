@@ -22,7 +22,24 @@ const favouriteBlog = (blogs) => {
     let fav = blogs.reduce(reducer,{});
     return fav;
 }
+const mostBlogs = (blogs) => {
+    let authors = blogs.map(x=> {return {author: x.author, blogs : 0}})
+    console.log(authors)
+    blogs.forEach(x=>{
+        let count = 0;
+        for(let authorsIndex = 0; authorsIndex < authors.length; authorsIndex++ ){
+            if(authors[authorsIndex].author === x.author){
+                authors[authorsIndex].blogs = authors[authorsIndex].blogs+1;
+            }
+        }
+    })
+    let reducer = (current,nextChecked) => {
+        return current.blogs > nextChecked.blogs ? current : nextChecked
+    }
+    let most = authors.reduce(reducer,{});
+    return most;
+}
   
   module.exports = {
-    dummy, totalLikes, favouriteBlog
+    dummy, totalLikes, favouriteBlog, mostBlogs
   }

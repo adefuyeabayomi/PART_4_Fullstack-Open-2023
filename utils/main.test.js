@@ -76,3 +76,12 @@ test('dummy returns one', () => {
       })
     })
   })
+  describe('most efficient author', () => {
+    test('Author with most blog posts', () => {
+      const result = listHelper.mostBlogs(blogList)
+      expect(result).toEqual({
+        author: "Robert C. Martin",
+        blogs : 3
+      })
+    })
+  })
