@@ -83,7 +83,7 @@ test("testing the [POST] '/api/blogs' route actually adds a document to the data
     }
 })
 
-test("testing the [POST] '/api/blogs' route actually adds a document to the database",async () =>{
+test("testing the [POST] '/api/blogs' defaults the missing like to 0",async () =>{
     let testData = {
         title: "Do Do Do Do Do Do. Saliba!",
         author: "The gunners",
@@ -94,6 +94,23 @@ test("testing the [POST] '/api/blogs' route actually adds a document to the data
         let res = await request.post("/api/blogs").send(testData).expect(204).expect('Content-Type', /json/);
         let body = res.body
         expect(body.likes).toBe(0);        
+    }
+    catch(error){
+        console.error("Error in the test for post request",error.message)
+    }
+})
+
+test("testing the [POST] '/api/blogs' responds [400 bad request] to the missing title or url",async () =>{
+    let testData = {
+        author: "The gunners",
+        url: "https://arsenal.com/",
+      }
+    testData = JSON.stringify(testData);
+    try{
+        let res = await request.post("/api/blogs").send(testData).expect(204).expect('Content-Type', /json/);
+        console.log("res status", res.status, res.statusCode)
+        let body = res.body
+        expect(res.status).toBe(400);        
     }
     catch(error){
         console.error("Error in the test for post request",error.message)

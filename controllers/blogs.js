@@ -13,14 +13,19 @@ blogRouter.post('/api/blogs', (request, response) => {
     if(!request.body.likes){
         request.body.likes = 0;
     }
-    const blog = new Blog(request.body)
-      console.log("body", request.body,typeof request.body);
-    blog
-      .save()
-      .then(result => {
-          console.log("saved",result)
-        response.status(201).json(result)
-      })
+    if(!request.body.url || !request.body.title){
+        response.status(400).json(request.body);
+    }
+    else {
+        const blog = new Blog(request.body)
+        console.log("body", request.body,typeof request.body);
+        blog
+        .save()
+        .then(result => {
+            console.log("saved",result)
+            response.status(201).json(result)
+        })        
+    }
   })
 
   module.exports = blogRouter;
