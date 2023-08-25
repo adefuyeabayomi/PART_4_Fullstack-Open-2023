@@ -55,5 +55,12 @@ beforeEach(async () => {
 test("testing the '/api/blogs' route to see if the right amount of documents which in this case is blogList.length",async () =>{
     let res = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
     let body = res.body;
-    expect(res.body.length).toBe(blogList.length);
+    expect(body.length).toBe(blogList.length);
 })
+
+test("testing the '/api/blogs' route to see if the documents have an id property",async () =>{
+    let res = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
+    let body = res.body;
+    expect(body[0].id).toBeDefined();
+})
+
