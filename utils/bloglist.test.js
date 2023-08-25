@@ -64,3 +64,23 @@ test("testing the '/api/blogs' route to see if the documents have an id property
     expect(body[0].id).toBeDefined();
 })
 
+test("testing the [POST] '/api/blogs' route actually adds a document to the database",async () =>{
+    let testData = {
+        title: "Olekzander Zinchenko",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 7,
+      }
+    testData = JSON.stringify(testData);
+    try{
+        let res = await request.post("/api/blogs").send(testData).expect(204).expect('Content-Type', /json/);
+        let verify = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
+        let updated = verify.body;
+        expect(updated.length).toBeDefined(blogList.length + 1);        
+    }
+    catch(error){
+        console.error("Error in the test for post request",error.message)
+    }
+
+})
+
