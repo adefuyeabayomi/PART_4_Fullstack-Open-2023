@@ -5,6 +5,7 @@ blogRouter.get('/api/blogs', (request, response) => {
     Blog
       .find({})
       .then(blogs => {
+        console.log("blogs gotten from database", blogs)
         response.json(blogs)
       })
   })
