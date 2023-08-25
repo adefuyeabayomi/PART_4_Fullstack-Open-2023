@@ -117,3 +117,11 @@ test("testing the [POST] '/api/blogs' responds [400 bad request] to the missing 
     }
 })
 
+test("testing to see if the delete works",async ()=>{
+    let check = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
+    console.log("blog body id", check.body[0].id)
+    let toBeDeleted = check.body[0].id;
+    let deleteDoc = await request.delete("/api/blogs/"+toBeDeleted).expect(204);
+    let verify = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
+    expect(verify.body.length).toBe(blogList.length-1)
+})

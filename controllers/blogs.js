@@ -5,7 +5,6 @@ blogRouter.get('/api/blogs', (request, response) => {
     Blog
       .find({})
       .then(blogs => {
-        console.log("blogs gotten from database", blogs)
         response.json(blogs)
       })
   })
@@ -26,6 +25,16 @@ blogRouter.post('/api/blogs', (request, response) => {
             response.status(201).json(result)
         })        
     }
+  })
+  blogRouter.delete("/api/blogs/:id",(request,response)=>{
+    let id = request.params.id;
+    Blog.deleteOne({_id:id}).then(res=>{
+        console.log("id",id,"deleted")
+        response.status(204).send(res);
+    }).catch(err=>{
+        console.error("unable to delete ",id,err.message)
+        response.status(400).send(err.message);
+    })
   })
 
   module.exports = blogRouter;
