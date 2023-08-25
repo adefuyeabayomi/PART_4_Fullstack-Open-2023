@@ -81,6 +81,22 @@ test("testing the [POST] '/api/blogs' route actually adds a document to the data
     catch(error){
         console.error("Error in the test for post request",error.message)
     }
+})
 
+test("testing the [POST] '/api/blogs' route actually adds a document to the database",async () =>{
+    let testData = {
+        title: "Do Do Do Do Do Do. Saliba!",
+        author: "The gunners",
+        url: "https://arsenal.com/",
+      }
+    testData = JSON.stringify(testData);
+    try{
+        let res = await request.post("/api/blogs").send(testData).expect(204).expect('Content-Type', /json/);
+        let body = res.body
+        expect(body.likes).toBe(0);        
+    }
+    catch(error){
+        console.error("Error in the test for post request",error.message)
+    }
 })
 

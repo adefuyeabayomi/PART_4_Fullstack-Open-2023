@@ -16,6 +16,9 @@ const blogSchema = new mongoose.Schema({
   blogSchema.set("toJSON",{
     transform : function (doc,retObj){
       retObj.id = doc._id.toString();
+      if(!retObj.likes){
+        retObj.likes = 0;
+      }
       delete retObj._id;
       delete retObj.__v;
     }

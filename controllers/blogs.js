@@ -10,6 +10,9 @@ blogRouter.get('/api/blogs', (request, response) => {
       })
   })
 blogRouter.post('/api/blogs', (request, response) => {
+    if(!request.body.likes){
+        request.body.likes = 0;
+    }
     const blog = new Blog(request.body)
       console.log("body", request.body,typeof request.body);
     blog
