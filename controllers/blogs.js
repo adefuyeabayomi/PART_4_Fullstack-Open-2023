@@ -26,13 +26,34 @@ blogRouter.post('/api/blogs', (request, response) => {
         })        
     }
   })
+  blogRouter.get("/api/blogs/:id",(request,response)=>{
+    let id = request.params.id;
+    Blog.findById(id).then(res=>{
+        response.status(200).send(res);
+    }).catch(err=>{
+        console.error("unable to retrieve blog",id,err.message)
+        response.status(404).send(err.message);
+    })
+  })
+
   blogRouter.delete("/api/blogs/:id",(request,response)=>{
     let id = request.params.id;
     Blog.deleteOne({_id:id}).then(res=>{
-        console.log("id",id,"deleted")
+        console.log("id",id,"deleted",res)
         response.status(204).send(res);
     }).catch(err=>{
         console.error("unable to delete ",id,err.message)
+        response.status(400).send(err.message);
+    })
+  })
+  blogRouter.put("/api/blogs/:id",(request,response)=>{
+    let id = request.params.id;
+    let updateDoc = request.body
+    Blog.updateOne({_id:id},updateDoc).then(res=>{
+        console.log("id",id,"updated",res)
+        response.status(200).send(res);
+    }).catch(err=>{
+        console.error("unable to update ",id,err.message)
         response.status(400).send(err.message);
     })
   })

@@ -125,3 +125,18 @@ test("testing to see if the delete works",async ()=>{
     let verify = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
     expect(verify.body.length).toBe(blogList.length-1)
 })
+
+
+test("testing to see if update functionality works",async ()=>{
+    let updateData = {
+        author : "Lawal Safura",
+    }
+    let check = await request.get("/api/blogs").expect(200).expect('Content-Type', /json/);
+    console.log("blog body id", check.body[0].id)
+    let toBeUpdated = check.body[0].id;
+    let update = await request.put("/api/blogs/"+toBeUpdated).send(updateData).expect(200);
+    let verify = await request.get("/api/blogs/"+toBeUpdated).expect(200).expect('Content-Type', /json/);
+    expect(verify.body.author).toBe(updateData.author)
+})
+
+
