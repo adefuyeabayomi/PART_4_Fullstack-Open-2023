@@ -5,7 +5,7 @@ var salt = bcryptjs.genSaltSync(10);
 
 // returns all users in the database
 userRouter.get("/api/users",(request,response,next)=>{
-    User.find({}).then((data)=>{
+    User.find({}).populate("blogs").then((data)=>{
         console.log("users in the database",data)
         response.status(200).json(data)
     }).catch(err=>{
@@ -15,6 +15,9 @@ userRouter.get("/api/users",(request,response,next)=>{
 })
 // creates a new user in the database
 userRouter.post("/api/users",(request,response,next)=>{
+    if(request.body.username.length < 3 || request.body.password.length < 8){
+        return response.status(400).send({error : "Username and password must be of length greater than 3 and 8 respectively"});
+    }
     console.log("password", request.body.password)
     bcryptjs.hash(request.body.password,salt).then(cryptPass=>{
         let userObject = {
