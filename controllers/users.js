@@ -1,6 +1,6 @@
 let userRouter = require("express").Router();
 let User = require("../models/user_model");
-let bcryptjs = require("bcryptjs");
+let bcryptjs = require("bcryptjs")
 var salt = bcryptjs.genSaltSync(10);
 
 // returns all users in the database
@@ -13,6 +13,7 @@ userRouter.get("/api/users",(request,response,next)=>{
         next(err);
     })
 })
+
 // creates a new user in the database
 userRouter.post("/api/users",(request,response,next)=>{
     if(request.body.username.length < 3 || request.body.password.length < 8){
@@ -31,6 +32,7 @@ userRouter.post("/api/users",(request,response,next)=>{
         }).catch(err=> next(err))
     }).catch(err=> next(err))
 })
+
 // returns a the user with the corresponding id
 userRouter.get("/api/users/:id",(request,response,next)=>{
     let id = request.params.id;

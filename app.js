@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const blogController = require("./controllers/blogs");
-const userController = require("./controllers/users")
+const userController = require("./controllers/users");
+const loginController = require("./controllers/login")
 const middleware = require("./utils/middleware")
 const mongoose = require("mongoose");
 const config = require("./utils/config");
@@ -21,6 +22,7 @@ mongoose.connect(DB_URL).then(()=>{
 
 app.use(cors())
 app.use(express.json())
+app.use(loginController)
 app.use(blogController)
 app.use(userController)
 app.use(middleware.errorMiddleware);
