@@ -17,7 +17,8 @@ blogRouter.get('/api/blogs', (request, response) => {
       })
   })
 blogRouter.post('/api/blogs',async (request, response,next) => {
-    let token = request.header("Authorization");
+    let token = request.token;
+    console.log("token",token)
     let decodedToken
     try {
         decodedToken = jwt.verify(token, config.SECRET)        

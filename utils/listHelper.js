@@ -54,8 +54,6 @@ const popularBloggers = (blogs) => {
     let popularBloggers = authors.reduce(reducer,{})
     return popularBloggers;
 }
-
-
   
   module.exports = {
     dummy, totalLikes, favouriteBlog, mostBlogs,popularBloggers

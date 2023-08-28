@@ -20,6 +20,7 @@ mongoose.connect(DB_URL).then(()=>{
     console.error("Unable to connect to database",err.message);
 });
 
+app.use(middleware.tokenExtractor);
 app.use(cors())
 app.use(express.json())
 app.use(loginController)

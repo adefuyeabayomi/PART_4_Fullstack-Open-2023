@@ -7,4 +7,8 @@ let errorMiddleware = (error,request,response,next) => {
     }
     next(error);
 }
-module.exports = {errorMiddleware};
+let tokenExtractor = (request,response,next) => {
+    request.token = request.header("Authorization");    
+    next();
+}
+module.exports = {errorMiddleware,tokenExtractor};
