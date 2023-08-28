@@ -68,15 +68,35 @@ blogRouter.post('/api/blogs',async (request, response,next) => {
     })
   })
 
-  blogRouter.delete("/api/blogs/:id",(request,response)=>{
+  blogRouter.delete("/api/blogs/:id",async (request, response,next) => {
+    let token = request.token;
+    console.log("token",token)
+    let decodedToken
+    try {
+        decodedToken = jwt.verify(token, config.SECRET)
+    }
+    catch(err){
+        return next(err);
+    }
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'Unauthorized' })
+    }
     let id = request.params.id;
-    Blog.deleteOne({_id:id}).then(res=>{
-        console.log("id",id,"deleted",res)
-        response.status(204).send(res);
-    }).catch(err=>{
-        console.error("unable to delete ",id,err.message)
-        response.status(400).send(err.message);
-    })
+    let blogCreator = await Blog.findOne({_id:id});
+    blogCreator = blogCreator.user.toString();
+    console.log("creator ", blogCreator)
+    if(blogCreator === decodedToken.id){
+        Blog.deleteOne({_id:id}).then(res=>{
+            console.log("id",id,"deleted",res)
+            response.status(204).json(res);
+        }).catch(err=>{
+            console.error("unable to delete ",id,err.message)
+            response.status(400).send(err.message);
+        })        
+    }
+    else {
+        response.status(401).json({ error : "Unauthorized" })
+    }
   })
   blogRouter.put("/api/blogs/:id",(request,response)=>{
     let id = request.params.id;
