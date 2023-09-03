@@ -8,7 +8,8 @@
     "dev": "cross-env NODE_ENV=development nodemon index",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "testMain": "cross-env NODE_ENV=test jest --verbose --runInBand -- ./utils/main.test.js",
-    "testbloglist": "cross-env NODE_ENV=test jest --verbose --runInBand -- ./utils/bloglist.test.js"
+    "testbloglist": "cross-env NODE_ENV=test jest --verbose --runInBand -- ./utils/bloglist.test.js",
+    "start:test": "cross-env NODE_ENV=test nodemon index.js"
   },
   "author": "",
   "license": "ISC",

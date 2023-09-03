@@ -22,7 +22,7 @@ loginRouter.post("/api/login/", (request,response,next)=>{
                 console.log("de tokenized", jwt.verify(token,config.SECRET))
                 response
                   .status(200)
-                  .send({ token, username})                      
+                  .send({ token, username, id: user[0]._id})                      
             }
             else {
                 return response.status(401).json({error:"invalid username and password"})

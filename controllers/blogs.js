@@ -9,6 +9,7 @@ blogRouter.get('/api/blogs', (request, response) => {
     Blog
       .find({}).populate("user")
       .then(blogs => {
+        console.log("blogs",blogs)
         blogs = blogs.map(x=>{
             x.user.password = undefined;
             return x;
@@ -55,7 +56,7 @@ blogRouter.post('/api/blogs',async (request, response,next) => {
             response.status(201).json(result)
         }).catch(err=>{
             next(err)
-        })                 
+        })
     }
   })
   blogRouter.get("/api/blogs/:id",(request,response)=>{
@@ -79,7 +80,7 @@ blogRouter.post('/api/blogs',async (request, response,next) => {
         return next(err);
     }
     if (!decodedToken.id) {
-      return response.status(401).json({ error: 'Unauthorized' })
+      return response.status(401).json({ error: 'Unauthorized' , reason : "unable to verify user, please try to log out and login again to verify that it is you."})
     }
     let id = request.params.id;
     let blogCreator = await Blog.findOne({_id:id});
@@ -92,15 +93,35 @@ blogRouter.post('/api/blogs',async (request, response,next) => {
         }).catch(err=>{
             console.error("unable to delete ",id,err.message)
             response.status(400).send(err.message);
-        })        
+        })
     }
     else {
-        response.status(401).json({ error : "Unauthorized" })
+        response.status(401).json({ error : "Unauthorized" , reason : "You didn't create this blog. Only the owner can delete it"})
     }
   })
-  blogRouter.put("/api/blogs/:id",(request,response)=>{
+  blogRouter.put("/api/blogs/:id",(request,response,next)=>{
+    let token = request.token;
+    console.log("token",token)
+    let decodedToken
+    try {
+        decodedToken = jwt.verify(token, config.SECRET)
+    }
+    catch(err){
+        return next(err);
+    }
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'Unauthorized' })
+    }
+
     let id = request.params.id;
-    let updateDoc = request.body
+    let updateDoc = {};
+    if(request.body.type === "like") {
+        updateDoc = {
+            $inc : {
+                likes : 1
+            }
+        }
+    }
     Blog.updateOne({_id:id},updateDoc).then(res=>{
         console.log("id",id,"updated",res)
         response.status(200).send(res);

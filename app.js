@@ -3,13 +3,19 @@ const app = express()
 const cors = require('cors')
 const blogController = require("./controllers/blogs");
 const userController = require("./controllers/users");
-const loginController = require("./controllers/login")
+const loginController = require("./controllers/login");
+const testingRouter = require("./controllers/testing")
 const middleware = require("./utils/middleware")
 const mongoose = require("mongoose");
 const config = require("./utils/config");
+
 let DB_URL;
+
+app.use(cors())
+console.log("config node env", config.NODE_ENV)
 if(config.NODE_ENV === "test" || config.NODE_ENV === "development"){
     DB_URL = config.DB_URL_TEST;
+    app.use(testingRouter)
 }   
 else {
     DB_URL = config.DB_URL_PRODUCTION
@@ -19,14 +25,11 @@ mongoose.connect(DB_URL).then(()=>{
 }).catch((err)=>{
     console.error("Unable to connect to database",err.message);
 });
-
-app.use(middleware.tokenExtractor);
-app.use(middleware.userExtractor)
-app.use(cors())
+//app.use(middleware.userExtractor)
 app.use(express.json())
 app.use(loginController)
-app.use(blogController)
+app.use( middleware.tokenExtractor,blogController)
 app.use(userController)
 app.use(middleware.errorMiddleware);
-
 module.exports = app;
+
